@@ -56,8 +56,10 @@ export class GameScene extends Phaser.Scene {
     this.tilemap = this.make.tilemap(TilemapConfig);
     this.tileset = this.tilemap.addTilesetImage("tiles");
     this.layer = this.tilemap.createStaticLayer(0, this.tileset, 0, 0);
-
     this.layer.setCollisionBetween(6, 29, true);
+    this.layer.setPipeline("Light2D");
+
+    this.lights.enable().setAmbientColor(0x555555);
 
     this.player = new Player({
       scene: this,
@@ -66,12 +68,14 @@ export class GameScene extends Phaser.Scene {
       key: "player"
     });
 
+    let light = this.lights.addLight(4, 4, 200);
+
     this.physics.add.collider(this.player, this.layer);
 
     // *****************************************************************
     // CAMERA
     // *****************************************************************
-    /*this.cameras.main.startFollow(this.player);
+    this.cameras.main.startFollow(this.player);
 
     this.cameras.main.setBounds(
       0,
@@ -79,9 +83,9 @@ export class GameScene extends Phaser.Scene {
       this.tilemap.widthInPixels,
       this.tilemap.heightInPixels
     );
-    this.cameras.main.setZoom(2);*/
+    this.cameras.main.setZoom(4);
 
-    this.gfx = this.add.graphics({
+    /*this.gfx = this.add.graphics({
       lineStyle: { width: 1, color: 0x00ff00 },
       fillStyle: { color: 0xff0000, alpha: 0.2 }
     });
@@ -104,7 +108,7 @@ export class GameScene extends Phaser.Scene {
           )
         );
       }
-    }
+    }*/
   }
 
   update(): void {

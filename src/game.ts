@@ -20,7 +20,7 @@ const config: GameConfig = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH
   },
-  type: Phaser.AUTO,
+  type: Phaser.WEBGL,
   parent: "game",
   scene: [GameScene],
   input: {
