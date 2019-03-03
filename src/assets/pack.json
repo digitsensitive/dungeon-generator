@@ -1,0 +1,20 @@
+{
+  "bspTreesPack": {
+    "files": [
+      {
+        "type": "image",
+        "key": "tiles",
+        "url": "./src/assets/images/tiles.png"
+      },
+      {
+        "type": "spritesheet",
+        "key": "player",
+        "url": "./src/assets/sprites/player.png",
+        "frameConfig": {
+          "frameWidth": 8,
+          "frameHeight": 8
+        }
+      }
+    ]
+  }
+}
