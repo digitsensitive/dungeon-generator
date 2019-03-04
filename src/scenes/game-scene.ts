@@ -57,9 +57,6 @@ export class GameScene extends Phaser.Scene {
     this.tileset = this.tilemap.addTilesetImage("tiles");
     this.layer = this.tilemap.createStaticLayer(0, this.tileset, 0, 0);
     this.layer.setCollisionBetween(6, 29, true);
-    this.layer.setPipeline("Light2D");
-
-    this.lights.enable().setAmbientColor(0x555555);
 
     this.player = new Player({
       scene: this,
@@ -67,8 +64,6 @@ export class GameScene extends Phaser.Scene {
       y: 24,
       key: "player"
     });
-
-    let light = this.lights.addLight(4, 4, 200);
 
     this.physics.add.collider(this.player, this.layer);
 
