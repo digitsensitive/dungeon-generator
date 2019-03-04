@@ -6,7 +6,7 @@
  */
 
 import { Player } from "../objects/player";
-import { Tree } from "../dungeon-generator/tree";
+import { Tree } from "../binary-tree/tree";
 
 export class GameScene extends Phaser.Scene {
   private tilemap: Phaser.Tilemaps.Tilemap;
