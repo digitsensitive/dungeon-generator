@@ -22,11 +22,12 @@ export class Node {
     this.parent = nodeConfig.parentNode;
 
     // set node data
-    this.data.position.x = nodeConfig.x;
-    this.data.position.y = nodeConfig.y;
-    this.data.num_tiles_width = nodeConfig.numTiledWidth;
-    this.data.num_tiles_height = nodeConfig.numTiledHeight;
-    this.data.room = undefined;
+    this.data = {
+      position: { x: nodeConfig.x, y: nodeConfig.y },
+      num_tiles_width: nodeConfig.numTiledWidth,
+      num_tiles_height: nodeConfig.numTiledHeight,
+      room: undefined
+    };
   }
 
   public getLeftChild(): Node {
