@@ -1,7 +1,7 @@
 /**
  * @author       Digitsensitive <digit.sensitivee@gmail.com>
  * @copyright    2019 Digitsensitive
- * @description  Dungeon Generator: Tree Config
+ * @description  Binary Tree: Tree Config
  * @license      Digitsensitive
  */
 

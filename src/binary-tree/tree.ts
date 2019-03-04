@@ -1,11 +1,11 @@
 /**
  * @author       Digitsensitive <digit.sensitivee@gmail.com>
  * @copyright    2019 Digitsensitive
- * @description  Dungeon Generator: Tree
+ * @description  Binary Tree: Tree
  * @license      Digitsensitive
  */
 
-import { ITreeConfig } from "../dungeon-generator/interfaces/tree-config.interface";
+import { ITreeConfig } from "../binary-tree/interfaces/tree-config.interface";
 import { Node } from "./node";
 
 export class Tree {
@@ -78,20 +78,20 @@ export class Tree {
       hasDivided = false;
       for (let node of this.nodes) {
         if (
-          node.children[0] === null &&
-          node.children[1] === null &&
+          node.getLeftChild() === null &&
+          node.getRightChild() === null &&
           this.iterations > 0
         ) {
           this.iterations--;
           // node has no children
           if (
-            node.NUM_TILES_WIDTH > this.MAX_NODE_SIZE ||
-            node.NUM_TILES_HEIGHT > this.MAX_NODE_SIZE
+            node.getData().num_tiles_width > this.MAX_NODE_SIZE ||
+            node.getData().num_tiles_height > this.MAX_NODE_SIZE
           ) {
             // start to divide the room
             if (this.doSplit(node)) {
-              this.nodes.push(node.children[0]);
-              this.nodes.push(node.children[1]);
+              this.nodes.push(node.getLeftChild());
+              this.nodes.push(node.getRightChild());
               hasDivided = true;
             }
           }
@@ -119,8 +119,9 @@ export class Tree {
 
     // get max size depending on the split
     let max: number =
-      (splitHorizontal ? node.NUM_TILES_HEIGHT : node.NUM_TILES_WIDTH) -
-      this.MIN_NODE_SIZE;
+      (splitHorizontal
+        ? node.getData().num_tiles_height
+        : node.getData().num_tiles_width) - this.MIN_NODE_SIZE;
 
     // you have reached the minimum size, so do not split
     if (max <= this.MIN_NODE_SIZE) {
@@ -132,40 +133,48 @@ export class Tree {
 
     if (splitHorizontal) {
       // split horizontal
-      node.children[0] = new Node({
-        parentNode: node,
-        type: "LEAF",
-        x: node.POS_X,
-        y: node.POS_Y,
-        numTiledWidth: node.NUM_TILES_WIDTH,
-        numTiledHeight: split
-      });
-      node.children[1] = new Node({
-        parentNode: node,
-        type: "LEAF",
-        x: node.POS_X,
-        y: node.POS_Y + split * this.TILE_SIZE,
-        numTiledWidth: node.NUM_TILES_WIDTH,
-        numTiledHeight: node.NUM_TILES_HEIGHT - split
-      });
+      node.setLeftChild(
+        new Node({
+          parentNode: node,
+          type: "LEAF",
+          x: node.getData().position.x,
+          y: node.getData().position.y,
+          numTiledWidth: node.getData().num_tiles_width,
+          numTiledHeight: split
+        })
+      );
+      node.setRightChild(
+        new Node({
+          parentNode: node,
+          type: "LEAF",
+          x: node.getData().position.x,
+          y: node.getData().position.y + split * this.TILE_SIZE,
+          numTiledWidth: node.getData().num_tiles_width,
+          numTiledHeight: node.getData().num_tiles_height - split
+        })
+      );
     } else {
       // split vertical
-      node.children[0] = new Node({
-        parentNode: node,
-        type: "LEAF",
-        x: node.POS_X,
-        y: node.POS_Y,
-        numTiledWidth: split,
-        numTiledHeight: node.NUM_TILES_HEIGHT
-      });
-      node.children[1] = new Node({
-        parentNode: node,
-        type: "LEAF",
-        x: node.POS_X + split * this.TILE_SIZE,
-        y: node.POS_Y,
-        numTiledWidth: node.NUM_TILES_WIDTH - split,
-        numTiledHeight: node.NUM_TILES_HEIGHT
-      });
+      node.setLeftChild(
+        new Node({
+          parentNode: node,
+          type: "LEAF",
+          x: node.getData().position.x,
+          y: node.getData().position.y,
+          numTiledWidth: split,
+          numTiledHeight: node.getData().num_tiles_height
+        })
+      );
+      node.setRightChild(
+        new Node({
+          parentNode: node,
+          type: "LEAF",
+          x: node.getData().position.x + split * this.TILE_SIZE,
+          y: node.getData().position.y,
+          numTiledWidth: node.getData().num_tiles_width - split,
+          numTiledHeight: node.getData().num_tiles_height
+        })
+      );
     }
 
     // parent node is now a sibling
@@ -185,13 +194,15 @@ export class Tree {
     let splitHorizontal: boolean = Math.random() >= 0.5;
 
     if (
-      node.NUM_TILES_WIDTH > node.NUM_TILES_HEIGHT &&
-      node.NUM_TILES_WIDTH / node.NUM_TILES_HEIGHT >= this.WIDTH_HEIGHT_RATIO
+      node.getData().num_tiles_width > node.getData().num_tiles_height &&
+      node.getData().num_tiles_width / node.getData().num_tiles_height >=
+        this.WIDTH_HEIGHT_RATIO
     ) {
       splitHorizontal = false;
     } else if (
-      node.NUM_TILES_HEIGHT > node.NUM_TILES_WIDTH &&
-      node.NUM_TILES_HEIGHT / node.NUM_TILES_WIDTH >= this.HEIGHT_WIDTH_RATIO
+      node.getData().num_tiles_height > node.getData().num_tiles_width &&
+      node.getData().num_tiles_height / node.getData().num_tiles_width >=
+        this.HEIGHT_WIDTH_RATIO
     ) {
       splitHorizontal = true;
     }
@@ -201,18 +212,24 @@ export class Tree {
 
   private createRoom(node: Node): Phaser.Geom.Rectangle {
     let roomSize = new Phaser.Geom.Point(
-      Phaser.Math.RND.between(this.MIN_NODE_SIZE, node.NUM_TILES_WIDTH - 4),
-      Phaser.Math.RND.between(this.MIN_NODE_SIZE, node.NUM_TILES_HEIGHT - 4)
+      Phaser.Math.RND.between(
+        this.MIN_NODE_SIZE,
+        node.getData().num_tiles_width - 4
+      ),
+      Phaser.Math.RND.between(
+        this.MIN_NODE_SIZE,
+        node.getData().num_tiles_height - 4
+      )
     );
 
     let roomPos = new Phaser.Geom.Point(
-      Phaser.Math.RND.between(0, node.NUM_TILES_WIDTH - roomSize.x),
-      Phaser.Math.RND.between(0, node.NUM_TILES_HEIGHT - roomSize.y)
+      Phaser.Math.RND.between(0, node.getData().num_tiles_width - roomSize.x),
+      Phaser.Math.RND.between(0, node.getData().num_tiles_height - roomSize.y)
     );
 
     return new Phaser.Geom.Rectangle(
-      node.POS_X + roomPos.x * this.TILE_SIZE,
-      node.POS_Y + roomPos.y * this.TILE_SIZE,
+      node.getData().position.x + roomPos.x * this.TILE_SIZE,
+      node.getData().position.y + roomPos.y * this.TILE_SIZE,
       roomSize.x * this.TILE_SIZE,
       roomSize.y * this.TILE_SIZE
     );
