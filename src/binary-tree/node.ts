@@ -5,15 +5,14 @@
  * @license      Digitsensitive
  */
 
-import { IBinaryTreeDataConfig } from "../binary-tree/interfaces/binary-tree-data-config.interface";
+import { INodeDataConfig } from "../binary-tree/interfaces/node-data-config.interface";
 import { INodeConfig } from "../binary-tree/interfaces/node-config.interface";
 
 export class Node {
   private children: [Node, Node];
   private nodeType: string;
   private parent: Node;
-
-  private data: IBinaryTreeDataConfig;
+  private data: INodeDataConfig;
 
   constructor(nodeConfig: INodeConfig) {
     // set base node data
@@ -24,8 +23,8 @@ export class Node {
     // set node data
     this.data = {
       position: { x: nodeConfig.x, y: nodeConfig.y },
-      num_tiles_width: nodeConfig.numTiledWidth,
-      num_tiles_height: nodeConfig.numTiledHeight,
+      NUM_TILES_WIDTH: nodeConfig.numTiledWidth,
+      NUM_TILES_HEIGHT: nodeConfig.numTiledHeight,
       room: undefined
     };
   }
@@ -70,7 +69,7 @@ export class Node {
     return this.data.room;
   }
 
-  public getData(): IBinaryTreeDataConfig {
+  public getData(): INodeDataConfig {
     return this.data;
   }
 }

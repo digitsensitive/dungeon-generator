@@ -1,13 +1,13 @@
 /**
  * @author       Digitsensitive <digit.sensitivee@gmail.com>
  * @copyright    2019 Digitsensitive
- * @description  Binary Tree: Binary Tree Data Config
+ * @description  Binary Tree: Node Data Config
  * @license      Digitsensitive
  */
 
-export interface IBinaryTreeDataConfig {
+export interface INodeDataConfig {
   position: { x: number; y: number };
-  num_tiles_width: number;
-  num_tiles_height: number;
+  readonly NUM_TILES_WIDTH: number;
+  readonly NUM_TILES_HEIGHT: number;
   room: Phaser.Geom.Rectangle;
 }
